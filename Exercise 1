@@ -1,2 +1,146 @@
-//Comment
+#include <iostream>
+#include <string>
+#include <cctype> // for isdigit()
+#include <cmath> // for pow()
 
+using namespace std;
+
+struct ExpressionEvaluator {
+    string expression;
+    size_t index;
+    float result;
+};
+
+// Function prototypes
+float evaluateExpression(ExpressionEvaluator& evaluator);
+float evaluateParentheses(ExpressionEvaluator& evaluator);
+float evaluateExponents(ExpressionEvaluator& evaluator);
+float evaluateMultiplicationDivision(ExpressionEvaluator& evaluator);
+float evaluateAdditionSubtraction(ExpressionEvaluator& evaluator);
+
+int main() {
+    ExpressionEvaluator evaluator;
+    
+    cout << "Enter the arithmetic expression you want to evaluate: ";
+    getline(cin, evaluator.expression);
+    evaluator.index = 0;
+
+    float result = evaluateExpression(evaluator);
+    
+    cout << "Result: " << result << endl;
+
+    return 0;
+}
+
+// Function to evaluate arithmetic expression
+float evaluateExpression(ExpressionEvaluator& evaluator) {
+    return evaluateParentheses(evaluator);
+}
+
+// Function to evaluate expression within parentheses
+float evaluateParentheses(ExpressionEvaluator& evaluator) {
+    float result = 0.0;
+    bool insideParentheses = false;
+    string subExpression = "";
+
+    while (evaluator.index < evaluator.expression.length()) {
+        char c = evaluator.expression[evaluator.index++];
+
+        if (c == '(') {
+            insideParentheses = true;
+            subExpression = "";
+        } else if (c == ')') {
+            insideParentheses = false;
+            ExpressionEvaluator subEvaluator;
+            subEvaluator.expression = subExpression;
+            subEvaluator.index = 0;
+            result = evaluateExpression(subEvaluator);
+            break;
+        } else if (insideParentheses) {
+            subExpression += c;
+        }
+    }
+
+    return result;
+}
+
+// Function to evaluate exponents
+float evaluateExponents(ExpressionEvaluator& evaluator) {
+    float result = evaluateMultiplicationDivision(evaluator);
+    // Handle exponents
+    return result;
+}
+
+// Function to evaluate multiplication and division
+float evaluateMultiplicationDivision(ExpressionEvaluator& evaluator) {
+    float result = evaluateAdditionSubtraction(evaluator);
+    // Handle multiplication and division
+    return result;
+}
+
+// Function to evaluate addition and subtraction
+float evaluateAdditionSubtraction(ExpressionEvaluator& evaluator) {
+    float result = 0.0;
+    char op = '+';
+    float num = 0.0;
+    bool num_started = false;
+    bool negative = false;
+    bool decimal = false;
+    float decimal_place = 0.1;
+
+    while (evaluator.index < evaluator.expression.length()) {
+        char c = evaluator.expression[evaluator.index++];
+
+        if (isdigit(c) || c == '.') {
+            if (c == '.') {
+                decimal = true;
+                continue;
+            }
+            if (!num_started) {
+                num_started = true;
+                num = c - '0';
+                if (decimal) {
+                    decimal_place = 0.1;
+                }
+            } else {
+                if (decimal) {
+                    num += (c - '0') * decimal_place;
+                    decimal_place *= 0.1;
+                } else {
+                    num = num * 10 + (c - '0');
+                }
+            }
+        } else {
+            if (num_started) {
+                switch (op) {
+                    case '+':
+                        result += num;
+                        break;
+                    case '-':
+                        result -= num;
+                        break;
+                }
+                num_started = false;
+                num = 0.0;
+                decimal = false;
+                decimal_place = 0.1;
+            }
+            if (c == '+' || c == '-') {
+                op = c;
+            }
+        }
+    }
+
+    if (num_started) {
+        switch (op) {
+            case '+':
+                result += num;
+                break;
+            case '-':
+                result -= num;
+                break;
+        }
+    }
+
+    return result;
+}
