@@ -1,1 +1,106 @@
+#include <iostream>
+#include <string>
+using namespace std;
 
+// Enum for months
+enum Month {
+    January = 1,
+    February,
+    March,
+    April,
+    May,
+    June,
+    July,
+    August,
+    September,
+    October,
+    November,
+    December
+};
+
+// Struct to hold birthday information
+struct BirthdayInfo {
+    int month;
+    int day;
+    int year;
+};
+
+// Function prototypes
+string getMonthMeaning(Month month);
+void checkSpecialDays(const BirthdayInfo& birthday);
+void checkMillennial(const BirthdayInfo& birthday);
+
+int main() {
+    char choice;
+    do {
+        BirthdayInfo birthday;
+
+        cout << "Welcome to Birthday Date Meaning Generator!" << endl;
+        cout << "Please enter the month of your birthday: ";
+        cin >> birthday.month;
+        cout << "Please enter the day of your birthday: ";
+        cin >> birthday.day;
+        cout << "Please enter the year of your birthday: ";
+        cin >> birthday.year;
+
+        // Display month meaning
+        cout << "The month of " << getMonthMeaning(static_cast<Month>(birthday.month)) << " means " << getMonthMeaning(static_cast<Month>(birthday.month)) << endl;
+
+        // Check special days
+        checkSpecialDays(birthday);
+
+        // Check millennial
+        checkMillennial(birthday);
+
+        cout << "Would you like to try another one? (Y/N): ";
+        cin >> choice;
+    } while (choice == 'y' || choice == 'Y');
+
+    cout << "Thanks for playing!" << endl;
+
+    return 0;
+}
+
+// Function to get month meaning
+string getMonthMeaning(Month month) {
+    switch (month) {
+        case January:
+            return "Janus";
+        case February:
+            return "Februa";
+        case March:
+            return "Mars";
+        case April:
+            return "Aphrodite";
+        case May:
+            return "Maia";
+        case June:
+            return "Juno";
+        case July:
+            return "Julius Caesar";
+        case August:
+            return "Augustus Caesar";
+        case September:
+            return "Seven";
+        case October:
+            return "Octavian";
+        case November:
+            return "Novem";
+        case December:
+            return "Decem";
+        default:
+            return "Invalid month.";
+    }
+}
+
+// Function to check special days
+void checkSpecialDays(const BirthdayInfo& birthday) {
+    if (birthday.month == 1 && birthday.day == 1)
+        cout << "The 1st of January means Self-Started" << endl;
+}
+
+// Function to check millennial
+void checkMillennial(const BirthdayInfo& birthday) {
+    if (birthday.year >= 2000 && birthday.year <= 2023)
+        cout << "The year of " << birthday.year << " means that you are a millennial" << endl;
+}
