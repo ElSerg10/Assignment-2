@@ -1,0 +1,87 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Struct to hold user information
+struct UserData {
+    string name;
+    int age;
+    string gender;
+    int height_feet;
+    int height_inches;
+    int weight_pounds;
+};
+
+// Function prototypes
+void getUserInput(UserData& user);
+double calculateBMI(const UserData& user);
+string determineBMIStatus(double bmi);
+void displayUserData(const UserData& user, double bmi, const string& bmi_status);
+
+int main() {
+    UserData user;
+
+    // Get user input
+    getUserInput(user);
+
+    // Calculate BMI
+    double bmi = calculateBMI(user);
+
+    // Determine BMI status
+    string bmi_status = determineBMIStatus(bmi);
+
+    // Display user information and BMI status
+    displayUserData(user, bmi, bmi_status);
+
+    return 0;
+}
+
+// Function to get user input
+void getUserInput(UserData& user) {
+    cout << "Enter your name: ";
+    getline(cin >> ws, user.name);
+
+    cout << "Enter your age: ";
+    cin >> user.age;
+
+    cout << "Enter your gender (male/female): ";
+    cin >> user.gender;
+
+    cout << "Enter your height by feet: ";
+    cin >> user.height_feet;
+
+    cout << "Enter your height by inches: ";
+    cin >> user.height_inches;
+
+    cout << "Enter your weight in pounds: ";
+    cin >> user.weight_pounds;
+}
+
+// Function to calculate BMI
+double calculateBMI(const UserData& user) {
+    int height_inches_total = (user.height_feet * 12) + user.height_inches;
+    return (703.0 * user.weight_pounds) / (height_inches_total * height_inches_total);
+}
+
+// Function to determine BMI status
+string determineBMIStatus(double bmi) {
+    if (bmi < 18.5)
+        return "Underweight";
+    else if (bmi < 25)
+        return "Normal weight";
+    else if (bmi < 30)
+        return "Overweight";
+    else
+        return "Obese";
+}
+
+// Function to display user information and BMI status
+void displayUserData(const UserData& user, double bmi, const string& bmi_status) {
+    cout << "\nName: " << user.name << endl;
+    cout << "Age: " << user.age << endl;
+    cout << "Gender: " << user.gender << endl;
+    cout << "Height by feet: " << user.height_feet << " feet" << endl;
+    cout << "Height by inches: " << user.height_inches << " inches" << endl;
+    cout << "Weight in pounds: " << user.weight_pounds << " lbs" << endl;
+    cout << "BMI: " << bmi << " (" << bmi_status << ")" << endl;
+}
